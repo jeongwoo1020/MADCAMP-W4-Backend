@@ -1,0 +1,11 @@
+# 환경 변수 파일 (절대 올리면 안 됨)
+.env
+
+# 파이썬 캐시 및 가상환경
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# 도커 데이터 폴더
+postgres_data/
