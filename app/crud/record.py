@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.models.record import UserReview
 from app.schemas.records import ReviewCreate, OnboardingCreate
@@ -59,11 +60,13 @@ def upsert_user_review(db: Session, user_id: str, review_in: ReviewCreate):
     
     return db.query(UserReview).filter_by(user_id=user_id, anime_id=review_in.anime_id).first()
 
-def get_user_records(db: Session, user_id: int, status: str = None):
-    query = db.query(UserReview).filter(UserReview.user_id == user_id)
-    if status:
-        query = query.filter(UserReview.status == status)
-    return query.order_by(UserReview.updated_at.desc()).all()
+def get_user_records(db: Session, user_id: int, skip: int = 0, limit: int = 20):
+    return db.query(UserReview).filter(
+            UserReview.user_id == user_id
+        ).offset(skip).limit(limit).all()
+
+def get_record_by_id(db: Session, record_id: int):
+    return db.query(UserReview).filter(UserReview.id == record_id).first()
 
 def delete_user_record(db: Session, user_id: int, anime_id: int):
     record = db.query(UserReview).filter_by(user_id=user_id, anime_id=anime_id).first()
