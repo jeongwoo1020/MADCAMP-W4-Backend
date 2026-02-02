@@ -9,7 +9,12 @@ def get_user_insight(db: Session, user_id: int):
 
 # 2. 분석 결과 저장/업데이트
 def upsert_user_insight(db: Session, user_id: int, insight_data: dict):
-    stmt = insert(UserInsight).values(user_id=user_id, **insight_data)
+    stmt = insert(UserInsight).values(
+        user_id=user_id, 
+        **insight_data,
+        updated_at=func.now()
+    )
+    
     update_stmt = stmt.on_conflict_do_update(
         index_elements=['user_id'],
         set_={**insight_data, "updated_at": func.now()}

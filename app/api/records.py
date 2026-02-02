@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from typing import List
 from app.schemas.records import ReviewCreate, ReviewResponse, OnboardingCreate
+from app.services.analysis_service import AnalysisService
 from app.crud import record as crud_record
 
 from app.api.deps import get_current_user 
@@ -27,8 +28,10 @@ def create_or_update_record(
     db: Session = Depends(get_db),
     current_user_id: int = Depends(get_current_user) # 토큰에서 ID 추출
 ):
-    # Pydantic 모델을 dict로 변환하여 CRUD에 전달
-    return crud_record.upsert_user_review(db, current_user_id, review_in)
+    record = crud_record.upsert_user_review(db, current_user_id, review_in)
+    AnalysisService.sync_user_insight(db, current_user_id)
+    
+    return record
 
 # 3. 내 모든 기록 조회 (선택 목록 + 리뷰)
 @router.get("/", response_model=List[ReviewResponse])

@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db.session import Base
+from sqlalchemy.dialects.postgresql import JSONB
 
 class User(Base):
     __tablename__ = "users" # SQL의 Users 테이블과 매칭
@@ -23,6 +24,9 @@ class UserInsight(Base):
     top_genres = Column(JSON) # PostgreSQL의 JSONB로 동작
     preference_vector = Column(JSON)
     persona_text = Column(Text)
+    
+    time_metrics = Column(JSONB, nullable=True)
+    
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     user = relationship("User", back_populates="insight")
