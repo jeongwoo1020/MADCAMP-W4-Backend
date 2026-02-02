@@ -1,8 +1,20 @@
 from sqlalchemy.orm import Session
 from app.models.record import UserReview
-from app.schemas.record import ReviewCreate
+from app.schemas.records import ReviewCreate, OnboardingCreate
 from sqlalchemy.dialects.postgresql import insert
 
+# 1. 온보딩 대량 저장 (Bulk Insert)
+def create_onboarding_records(db: Session, user_id: int, anime_ids: list):
+    for a_id in anime_ids:
+        stmt = insert(UserReview).values(
+            user_id=user_id, 
+            anime_id=a_id, 
+            status="WATCHED"
+        )
+        db.execute(stmt.on_conflict_do_nothing(constraint='unique_user_anime'))
+    db.commit()
+
+# 2. 상세 리뷰 저장 및 업데이트 (Upsert)
 def upsert_user_review(db: Session, user_id: str, review_in: ReviewCreate):
     # 가중치 평균 계산 로직 (예시: 산술 평균)
     avg_score = None
@@ -46,3 +58,17 @@ def upsert_user_review(db: Session, user_id: str, review_in: ReviewCreate):
     db.commit()
     
     return db.query(UserReview).filter_by(user_id=user_id, anime_id=review_in.anime_id).first()
+
+def get_user_records(db: Session, user_id: int, status: str = None):
+    query = db.query(UserReview).filter(UserReview.user_id == user_id)
+    if status:
+        query = query.filter(UserReview.status == status)
+    return query.order_by(UserReview.updated_at.desc()).all()
+
+def delete_user_record(db: Session, user_id: int, anime_id: int):
+    record = db.query(UserReview).filter_by(user_id=user_id, anime_id=anime_id).first()
+    if record:
+        db.delete(record)
+        db.commit()
+        return True
+    return False
