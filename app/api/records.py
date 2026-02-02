@@ -28,7 +28,7 @@ def create_or_update_record(
     current_user_id: int = Depends(get_current_user) # 토큰에서 ID 추출
 ):
     # Pydantic 모델을 dict로 변환하여 CRUD에 전달
-    return crud_record.upsert_user_review(db, current_user_id, review_in.dict())
+    return crud_record.upsert_user_review(db, current_user_id, review_in)
 
 # 3. 내 모든 기록 조회 (선택 목록 + 리뷰)
 @router.get("/", response_model=List[ReviewResponse])

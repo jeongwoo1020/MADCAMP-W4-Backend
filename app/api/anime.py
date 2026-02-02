@@ -15,7 +15,7 @@ def read_animes(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
 
 @router.get("/{anime_id}", response_model=AnimeResponse) 
 def get_anime_detail(anime_id: int, db: Session = Depends(get_db)):
-    anime = db.query(models.Anime).filter(models.Anime.id == anime_id).first()
+    anime = db.query(models.Anime).filter(models.Anime.anime_id == anime_id).first()
     
     if not anime:
         raise HTTPException(status_code=404, detail="애니메이션 정보를 찾을 수 없습니다.")
