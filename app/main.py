@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import records, analysis, anime
+from app.api import records, analysis, anime, auth
 
 app = FastAPI(
     title="Akiba.zip API",
@@ -10,6 +10,7 @@ app = FastAPI(
 app.include_router(anime.router, prefix="/api/animes", tags=["Anime"])
 app.include_router(records.router, prefix="/api/records", tags=["Records"])
 app.include_router(analysis.router, prefix="/api/analysis", tags=["Analysis"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 
 @app.get("/")
 def read_root():

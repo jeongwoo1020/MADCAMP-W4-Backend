@@ -25,7 +25,16 @@ class ReviewResponse(BaseModel):
     id: int
     anime_id: int
     status: str
+    
+    watching_start: Optional[date] = None
+    watching_end: Optional[date] = None
+    
+    score_story: Optional[int] = Field(None, ge=1, le=5)
+    score_character: Optional[int] = Field(None, ge=1, le=5)
+    score_art: Optional[int] = Field(None, ge=1, le=5)
+    score_music: Optional[int] = Field(None, ge=1, le=5)
     score: Optional[float] = None
+    
     comment: Optional[str] = None
     updated_at: datetime
 
