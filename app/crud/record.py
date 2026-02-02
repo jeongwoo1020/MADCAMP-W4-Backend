@@ -68,6 +68,16 @@ def get_user_records(db: Session, user_id: int, skip: int = 0, limit: int = 20):
 def get_record_by_id(db: Session, record_id: int):
     return db.query(UserReview).filter(UserReview.id == record_id).first()
 
+def get_summary_stats(db: Session, user_id: int):
+    # SQL: SELECT COUNT(*), AVG(score), COUNT(score) FROM user_reviews WHERE user_id = :user_id
+    stats = db.query(
+        func.count(UserReview.id),
+        func.avg(UserReview.score),
+        func.count(UserReview.score)
+    ).filter(UserReview.user_id == user_id).first()
+    
+    return stats # (total_count, avg_score, reviewed_count)
+
 def delete_user_record(db: Session, user_id: int, anime_id: int):
     record = db.query(UserReview).filter_by(user_id=user_id, anime_id=anime_id).first()
     if record:
