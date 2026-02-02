@@ -37,6 +37,7 @@ CREATE TABLE user_reviews (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES Users(user_id) ON DELETE CASCADE,
     anime_id INTEGER REFERENCES animes(anime_id) ON DELETE CASCADE,
+    status VARCHAR(20) DEFAULT 'WATCHED', -- 'WATCHED' or 'REVIEWED'
     watching_start DATE,
     watching_end DATE,
     score_story INTEGER,
@@ -45,7 +46,9 @@ CREATE TABLE user_reviews (
     score_music INTEGER,
     score FLOAT,
     comment TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_anime UNIQUE (user_id, anime_id),
 );
 
 CREATE TABLE user_insights (
