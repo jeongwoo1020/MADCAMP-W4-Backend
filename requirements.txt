@@ -11,3 +11,4 @@ google-auth
 requests
 PyJWT
 numpy
+google-genai
