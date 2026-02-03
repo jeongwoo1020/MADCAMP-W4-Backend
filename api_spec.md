@@ -242,33 +242,59 @@
 
 ---
 
-<!-- ## 5. TBD (To Be Developed)
-아래 기능은 현재 개발 중이거나 개발 예정인 API입니다.
+## 5. Recommend (추천 시스템)
+**Header**: `Authorization: Bearer <access_token>` 필요
 
-### 5-1. Recommendation (애니 추천)
-* **Status**: 예정
-* **Description**: 사용자 취향 벡터 기반 맞춤 애니메이션 추천
-* **Expected Endpoint**: `GET /analysis/recommendation`
-* **Expected Response**:
-    ```json
-    [
-      {
-        "anime_id": 1,
-        "title_en": "string",
-        "image_url": "string",
-        "similarity_score": 0.95
-      }
-    ]
-    ```
-
-### 5-2. Quote Analysis (명대사/성향 분석)
-* **Status**: 예정
-* **Description**: 사용자의 기록을 바탕으로 어울리는 페르소나 및 키워드 추출
-* **Expected Endpoint**: `GET /analysis/quote` (가칭)
-* **Expected Response**:
+### 5-1. Get Recommendations (맞춤 애니 추천)
+사용자의 취향 벡터(Insight)와 유사한 애니메이션을 추천합니다.
+* **Method**: `GET`
+* **Path**: `/recommend/{user_id}`
+* **Path Variables**:
+    * `user_id` (int): 추천받을 사용자 ID (본인 ID)
+* **Response Body**:
     ```json
     {
-      "keywords": ["희생", "신념"],
-      "persona_report": "당신은..."
+      "user_id": 1,
+      "recommendations": [
+        {
+          "anime_id": 10,
+          "title_en": "Frieren: Beyond Journey's End",
+          "image_url": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx154587-gJHx8zP659q6.jpg",
+          "similarity_score": 0.98,
+          "reason": "정우님이 좋아하시는 '판타지' 장르라 추천해요!"
+        },
+        {
+          "anime_id": 45,
+          "title_en": "Spy x Family",
+          "image_url": "...",
+          "similarity_score": 0.85,
+          "reason": "최근 평점이 높은 작품입니다."
+        }
+      ]
     }
-    ``` -->
+    ```
+
+---
+
+## 6. Chat (AI 명대사 분석)
+
+### 6-1. Analyze Quotes (명대사 성향 분석)
+사용자가 입력한 명대사 리스트를 바탕으로 AI가 성향을 즉석에서 분석해줍니다. (DB 저장 X)
+* **Method**: `POST`
+* **Path**: `/chat/chat`
+* **Request Body**:
+    ```json
+    {
+      "quotes": [
+        "포기하면 그 시합은 종료야",
+        "왼손은 거들 뿐",
+        "도망치면 하나, 전진하면 둘"
+      ]
+    }
+    ```
+* **Response Body**:
+    ```json
+    {
+      "analysis": "당신은 끈기 있고 열정적인 사람이며, 어려움 앞에서도 물러서지 않는 도전 정신을 가지고 있습니다."
+    }
+    ```
