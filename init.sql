@@ -48,7 +48,7 @@ CREATE TABLE user_reviews (
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_user_anime UNIQUE (user_id, anime_id),
+    CONSTRAINT unique_user_anime UNIQUE (user_id, anime_id)
 );
 
 CREATE TABLE user_insights (
