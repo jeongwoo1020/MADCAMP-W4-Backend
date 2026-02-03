@@ -12,7 +12,7 @@ def generate_reason(user_vec: list, anime_stats: list) -> str:
     scores = [u * a for u, a in zip(user_vec, anime_stats)]
     best_idx = scores.index(max(scores))
     
-    return f"정우님이 선호하시는 {labels[best_idx]} 요소가 돋보이는 작품이라 추천해 드려요!"
+    return f"선호하시는 {labels[best_idx]} 요소가 돋보이는 작품이라 추천해 드려요!"
 
 def get_recommendations(user_vector: Union[list, dict], candidates: List) -> List[dict]:
     # dict -> numpy 

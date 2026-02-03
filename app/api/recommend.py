@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.crud import recommends as crud
 from app.services import recommend_service as service
-from app.schemas.recommend import RecommendationListResponse # 정우님이 만든 스키마
+from app.services import gemini_service
+from app.schemas.recommend import RecommendationListResponse
 
 router = APIRouter()
 
