@@ -16,3 +16,4 @@ class RecommendedAnime(BaseModel):
 class RecommendationListResponse(BaseModel):
     user_id: int
     recommendations: List[RecommendedAnime]
+    
