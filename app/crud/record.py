@@ -1,6 +1,7 @@
 from sqlalchemy import func
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.record import UserReview
+from app.models.anime import Anime, AnimeKoreanTitle, Genre
 from app.schemas.records import ReviewCreate, OnboardingCreate
 from sqlalchemy.dialects.postgresql import insert
 
@@ -58,15 +59,29 @@ def upsert_user_review(db: Session, user_id: str, review_in: ReviewCreate):
     db.execute(update_stmt)
     db.commit()
     
-    return db.query(UserReview).filter_by(user_id=user_id, anime_id=review_in.anime_id).first()
+    return get_record_by_anime_id(db, user_id, review_in.anime_id)
+    # return db.query(UserReview).filter_by(user_id=user_id, anime_id=review_in.anime_id).first()
 
 def get_user_records(db: Session, user_id: int, skip: int = 0, limit: int = 20):
     return db.query(UserReview).filter(
             UserReview.user_id == user_id
+        ).options(
+            # 연쇄적으로 관계 데이터를 로드함 (Review -> Anime -> Titles/Genres)
+            joinedload(UserReview.anime).joinedload(Anime.korean_titles),
+            joinedload(UserReview.anime).joinedload(Anime.genres)
         ).offset(skip).limit(limit).all()
-
+        
 def get_record_by_id(db: Session, record_id: int):
-    return db.query(UserReview).filter(UserReview.id == record_id).first()
+    return db.query(UserReview).filter(UserReview.id == record_id).options(
+            joinedload(UserReview.anime).joinedload(Anime.korean_titles),
+            joinedload(UserReview.anime).joinedload(Anime.genres)
+        ).first()
+    
+def get_record_by_anime_id(db: Session, user_id: int, anime_id: int):
+    return db.query(UserReview).filter_by(user_id=user_id, anime_id=anime_id).options(
+            joinedload(UserReview.anime).joinedload(Anime.korean_titles),
+            joinedload(UserReview.anime).joinedload(Anime.genres)
+        ).first()
 
 def get_summary_stats(db: Session, user_id: int):
     # SQL: SELECT COUNT(*), AVG(score), COUNT(score) FROM user_reviews WHERE user_id = :user_id
