@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.anime import Anime, AnimeKoreanTitle, Genre, anime_genre_mapping
 
 # 1. 애니메이션 목록 및 검색
@@ -16,3 +16,11 @@ def get_genres_by_anime_ids(db: Session, anime_ids: list):
              .join(anime_genre_mapping) \
              .filter(anime_genre_mapping.c.anime_id.in_(anime_ids)) \
              .all()
+             
+# 4. 한글 제목으로 검색
+def search_anime_by_korean_title(db: Session, title: str):
+    return db.query(Anime) \
+        .join(AnimeKoreanTitle) \
+        .options(joinedload(Anime.korean_titles)) \
+        .filter(AnimeKoreanTitle.title_kr.contains(title)) \
+        .all()

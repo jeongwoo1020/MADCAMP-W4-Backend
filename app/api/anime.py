@@ -13,6 +13,13 @@ router = APIRouter()
 def read_animes(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
     return crud_anime.get_animes(db, skip=skip, limit=limit)
 
+@router.get("/search", response_model=List[AnimeResponse])
+def search_anime(title: str, db: Session = Depends(get_db)):
+    results = crud_anime.search_anime_by_korean_title(db, title=title)
+    if not results:
+        raise HTTPException(status_code=404, detail="검색 결과가 없습니다.")
+    return results
+
 @router.get("/{anime_id}", response_model=AnimeResponse) 
 def get_anime_detail(anime_id: int, db: Session = Depends(get_db)):
     anime = db.query(models.Anime).filter(models.Anime.anime_id == anime_id).first()
