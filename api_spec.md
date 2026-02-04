@@ -59,7 +59,38 @@
     ]
     ```
 
-### 2-2. Get Anime Detail (애니 상세 조회)
+### 2-2. Anime Search (애니 검색)
+한국어 이름을 통해 검색한 애니의 상세 정보를 조회합니다.
+* **Method**: `GET`
+* **Path**: `/animes/search`
+* **Path Variables**:
+    * `title` (string): 애니메이션 제목 (*한국어)
+* **Response Body**:
+    ```json
+    {
+      "anime_id": 1,
+      "anilist_id": 12345,
+      "title_en": "string",
+      "image_url": "string",
+      "description": "string",
+      "start_date": "2023-01-01",
+      "end_date": "2023-03-30",
+      "genres": [
+        {
+          "genre_id": 1,
+          "genre_name": "Action"
+        }
+      ],
+      "korean_titles": [
+        {
+          "title_kr": "string"
+        }
+      ]
+    }
+    ```
+
+
+### 2-3. Get Anime Detail (애니 상세 조회)
 특정 애니메이션의 상세 정보를 조회합니다.
 * **Method**: `GET`
 * **Path**: `/animes/{anime_id}`
