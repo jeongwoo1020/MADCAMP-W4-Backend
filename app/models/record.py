@@ -15,10 +15,10 @@ class UserReview(Base):
     watching_start = Column(Date)
     watching_end = Column(Date)
     
-    score_story = Column(Integer)
-    score_character = Column(Integer)
-    score_art = Column(Integer)
-    score_music = Column(Integer)
+    score_story = Column(Float)
+    score_character = Column(Float)
+    score_art = Column(Float)
+    score_music = Column(Float)
     score = Column(Float) # 가중치 평균
     comment = Column(Text)
     

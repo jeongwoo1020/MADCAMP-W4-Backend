@@ -13,10 +13,10 @@ class ReviewCreate(BaseModel):
     watching_end: Optional[date] = None
     
     # 1~5점 사이로 제한
-    score_story: Optional[int] = Field(None, ge=1, le=5)
-    score_character: Optional[int] = Field(None, ge=1, le=5)
-    score_art: Optional[int] = Field(None, ge=1, le=5)
-    score_music: Optional[int] = Field(None, ge=1, le=5)
+    score_story: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
+    score_character: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
+    score_art: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
+    score_music: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
     
     comment: Optional[str] = None
 
@@ -60,10 +60,10 @@ class ReviewResponse(BaseModel):
     watching_start: Optional[date] = None
     watching_end: Optional[date] = None
     
-    score_story: Optional[int] = Field(None, ge=1, le=5)
-    score_character: Optional[int] = Field(None, ge=1, le=5)
-    score_art: Optional[int] = Field(None, ge=1, le=5)
-    score_music: Optional[int] = Field(None, ge=1, le=5)
+    score_story: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
+    score_character: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
+    score_art: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
+    score_music: Optional[float] = Field(None, ge=0, le=5, multiple_of=0.5)
     score: Optional[float] = None
     
     comment: Optional[str] = None
