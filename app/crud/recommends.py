@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy import func, not_
 from app.models.record import UserReview
 from app.models.user import UserInsight
-from app.models.anime import Anime
+from app.models.anime import Anime, AnimeKoreanTitle
 from app.models.recommed import AnimeStats
 
 # 1. 유저의 취향 벡터 가져오기
@@ -30,8 +30,10 @@ def get_anime_stats_candidates(db: Session, user_id: int, limit: int = 500):
         AnimeStats.avg_story,
         AnimeStats.avg_art,
         AnimeStats.avg_character,
-        AnimeStats.avg_music
+        AnimeStats.avg_music,
+        AnimeKoreanTitle.title_kr
     ).join(AnimeStats, Anime.anime_id == AnimeStats.anime_id) \
+     .outerjoin(AnimeKoreanTitle, Anime.anime_id == AnimeKoreanTitle.anime_id) \
      .filter(not_(Anime.anime_id.in_(watched_ids_query))) \
      .limit(limit) \
      .all()

@@ -47,6 +47,7 @@ def get_recommendations(user_vector: Union[list, dict], candidates: List) -> Lis
         scored_results.append({
             "anime_id": anime.anime_id,
             "title_en": anime.title_en, # DB 필드명에 맞춰 매핑
+            "title_kr": anime.title_kr, # 한국어 제목 추가
             "image_url": anime.image_url, # Anime 모델의 이미지 필드
             "similarity_score": round(float(score), 4),
             "reason": generate_reason(user_vector, v_a.tolist())
