@@ -63,3 +63,21 @@ def read_record_detail(
         raise HTTPException(status_code=403, detail="이 기록에 접근할 권한이 없습니다.")
         
     return record
+
+@router.delete("/{record_id}", status_code=204) 
+def delete_record(
+    record_id: int,
+    db: Session = Depends(get_db),
+    current_user_id: int = Depends(get_current_user)
+):
+
+    record = crud_record.get_record_by_id(db, record_id=record_id)
+    
+    if not record:
+        raise HTTPException(status_code=404, detail="기록을 찾을 수 없습니다.")
+    
+    if record.user_id != current_user_id:
+        raise HTTPException(status_code=403, detail="권한이 없습니다.")
+        
+    crud_record.delete_user_record(db, record_id=record_id)
+    return None

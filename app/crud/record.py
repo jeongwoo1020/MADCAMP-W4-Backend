@@ -93,8 +93,9 @@ def get_summary_stats(db: Session, user_id: int):
     
     return stats # (total_count, avg_score, reviewed_count)
 
-def delete_user_record(db: Session, user_id: int, anime_id: int):
-    record = db.query(UserReview).filter_by(user_id=user_id, anime_id=anime_id).first()
+
+def delete_user_record(db: Session, record_id: int):
+    record = db.query(UserReview).filter(UserReview.id == record_id).first()
     if record:
         db.delete(record)
         db.commit()
